@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState, useEffect} from 'react';
+import Starwars from './assets/images/star-wars.png';
 import './App.css';
 
 function App() {
+  const [state, setState] = useState(null);
+
+  useEffect(() => {
+      fetch('https://swapi.dev/api/people', {
+          method: 'GET'
+      })  
+      .then(resp => resp.json())
+      .then(
+          response => {
+            console.log(response)
+              setState(response)
+          }
+      )   
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <img src={Starwars} alt="The official logo of the star wars movie" className="logo"/>
+      <section className="section">
+      <select>
+        <option>-No Movie Selected-</option>
+        {state && state.results.map(data =>(<option>{data.title} --{data.release_date}</option>))}
+      </select>
+      </section>
     </div>
   );
 }
